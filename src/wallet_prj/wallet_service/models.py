@@ -47,6 +47,12 @@ class WalletDetails(models.Model):
         db_table = 'wallet_details'
 
 
+TRANSACTION_TYPE_CHOICES = [
+    ('deposit', 'Deposit'),
+    ('withdraw', 'Withdrawal'),
+]
+
+
 class WalletTransactions(models.Model):
     """ Track of Wallet Transactions """
 
@@ -58,6 +64,8 @@ class WalletTransactions(models.Model):
         WalletDetails, related_name="wallet_details",
         on_delete=models.CASCADE,
         null=True, blank=True)
+    transaction_type = models.CharField(
+        max_length=10, choices=TRANSACTION_TYPE_CHOICES, default='deposit')
     reference_id = models.CharField(max_length=150, null=True, blank=True)
     withdrawn_by = models.TextField(max_length=150, null=True, blank=True)
     deposited_by = models.TextField(max_length=150, null=True, blank=True)
@@ -66,7 +74,7 @@ class WalletTransactions(models.Model):
     withdrawn_at = models.DateTimeField(blank=True, null=True)
 
     def __str__(self):
-        return self.reference_id
+        return str(self.reference_id)
 
     class Meta:
         db_table = 'wallet_transactions'
